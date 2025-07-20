@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <style>
+       
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+h1 {
+  margin: 40px 0 20px;
+  font-size: 2.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+form {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 15px;
+  width: 300px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease-in-out;
+}
+
+form:hover {
+  transform: scale(1.02);
+}
+
+h3 {
+  margin-bottom: 10px;
+  color: #f3f3f3;
+}
+
+input[type="number"] {
+  width: 100px;
+  padding: 10px;
+  margin: 10px 5px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #00c9a7;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #00b894;
+}
+
+#result {
+  font-size: 1.3rem;
+  margin-top: 25px;
+  color: #fff;
+  background-color: rgba(0,0,0,0.3);
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+    </style>
+</head>
+
+<body>
+    <h1>Calculator</h1>
+    <form id="addform">
+        <h3>Add</h3>
+        <input type="number" name="num1" required/>
+         <input type="number" name="num2" required/>
+         <button type="submit">Add</button>
+    </form>
+
+    <form id="subform">
+        <h3>Sub</h3>
+        <input type="number" name="num1" required/>
+         <input type="number" name="num2" required/>
+         <button type="submit">Sub</button>
+    </form>
+
+    <form id="mulform">
+        <h3>Mul</h3>
+        <input type="number" name="num1" required/>
+         <input type="number" name="num2" required/>
+         <button type="submit">Mul</button>
+    </form>
+
+    <form id="divform">
+        <h3>div</h3>
+        <input type="number" name="num1" required/>
+         <input type="number" name="num2" required/>
+         <button type="submit">Div</button>
+    </form>
+    <h3 id="result"></h3>
+    <script>
+        const result=document.getElementById("result");
+          function handleForm(formId, endpoint) {
+            const form=document.getElementById(formId);
+        form.addEventListener("submit",function(e){
+             e.preventDefault();
+             const num1 = parseFloat(form.elements["num1"].value);
+             const num2 = parseFloat(form.elements["num2"].value);
+          fetch(endpoint,{
+            method: "POST",
+           headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ num1, num2 })
+          })
+          .then(res => res.text())
+          .then(data=>{
+            result.textContent=data;
+          })
+            .catch(err => {
+        result.textContent = "Error occurred";
+        console.error(err);
+      });
+        })
+    }
+    handleForm("addform", "/add");
+    handleForm("subform", "/sub");
+    handleForm("mulform", "/mul");
+    handleForm("divform", "/div");
+        </script>
+
+</body>
+</html>
